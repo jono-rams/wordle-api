@@ -2,7 +2,6 @@ import { Hono } from 'hono';
 import { v4 as uuidv4 } from 'uuid';
 
 const app = new Hono();
-const expiryDuration = 60 * 60 * 1000; // 1 hour in milliseconds
 
 async function clearExpiredKeys(c) {
   try {
