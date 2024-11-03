@@ -69,7 +69,6 @@ app.get('/api/new-word', async (c) => {
         return c.status(500).json({ error: 'Failed to store word in KV' });
       }
 
-      console.log(wordByUser[uid]);
       return c.json({ uid });
     } catch (err) {
       console.error('Error fetching word from fallback API:', err);
