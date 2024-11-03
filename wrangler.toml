@@ -8,6 +8,9 @@ compatibility_flags = ["nodejs_compat"]
 binding = "wordGameData"
 id = "a33a9549e55042ef9d4075ac58f85423"
 
+[triggers]
+crons = ["0 * * * * /api/cleanup"] # every hour at the top of the hour
+
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
 # Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs

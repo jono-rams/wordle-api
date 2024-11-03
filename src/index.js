@@ -24,8 +24,6 @@ async function clearExpiredKeys(c) {
   }
 }
 
-setInterval(() => {clearExpiredKeys(c);}, expiryDuration + 5000);
-
 app.use("*", (c, next) => {
   try {
     const headers = new Headers();
@@ -148,6 +146,11 @@ app.get('/api/solution', async (c) => {
   }
   
   return c.json({ solution });
+});
+
+app.get('/api/cleanup', async (c) => {
+  await clearExpiredKeys(c);
+  return c.text('Cleanup initiated');
 });
 
 export default app;
