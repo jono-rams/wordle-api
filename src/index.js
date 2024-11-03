@@ -3,8 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 const app = new Hono();
 
-const wordByUser = {};
-
 app.use("*", (c, next) => {
   try {
     const headers = new Headers();
@@ -46,7 +44,9 @@ app.get('/api/new-word', async (c) => {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    wordByUser[uid] = data[0]; // Corrected assignment
+    
+    await c.env.wordGameData.put(uid, data[0]);
+
     return c.json({ uid });
   } catch (err) {
     console.error('Error fetching word from primary API:', err);
@@ -56,7 +56,9 @@ app.get('/api/new-word', async (c) => {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      wordByUser[uid] = data[0];
+
+      await c.env.wordGameData.put(uid, data[0]);
+
       console.log(wordByUser[uid]);
       return c.json({ uid });
     } catch (err) {
@@ -69,8 +71,9 @@ app.get('/api/new-word', async (c) => {
 
 app.post('/api/guess', async (c) => {
   const { uid, guess } = await c.req.json(); // Parse JSON body
-  console.log(c.req.body);
-  const secretWord = wordByUser[uid];
+  
+  const secretWord = await c.env.wordGameData.get(uid);
+
   if (!secretWord) {
     return c.status(400).json({ error: 'Invalid session id' });
   }
@@ -103,10 +106,15 @@ function compareWords(secretWord, guess) {
   return result;
 }
 
-app.get('/api/solution', (c) => {
+app.get('/api/solution', async (c) => {
   const uid = c.req.query('uid');
-  const solution = wordByUser[uid];
-  delete wordByUser[uid];
+  
+  const solution = await c.env.wordGameData.get(uid);
+
+  if (solution) {
+    await c.env.wordGameData.delete(uid);
+  }
+  
   return c.json({ solution });
 });
 
