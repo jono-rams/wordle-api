@@ -74,8 +74,12 @@ app.post('/api/guess', async (c) => {
   if (!secretWord) {
     return c.status(400).json({ error: 'Invalid session id' });
   }
+   // Input validation
+   if (typeof guess !== 'string' || guess.length !== 5 || !/^[a-z]+$/.test(guess)) {
+    return c.status(400).json({ error: 'Invalid guess' });
+  }
+
   const result = compareWords([...secretWord], [...guess]);
-  console.log(result);
   return c.json({ result });
 });
 
