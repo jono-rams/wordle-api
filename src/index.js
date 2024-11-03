@@ -2,6 +2,29 @@ import { Hono } from 'hono';
 import { v4 as uuidv4 } from 'uuid';
 
 const app = new Hono();
+const expiryDuration = 60 * 60 * 1000; // 1 hour in milliseconds
+
+async function clearExpiredKeys(c) {
+  try {
+    const list = await c.env.wordGameData.list();
+
+    const now = Date.now();
+
+    for (const key of list.keys) {
+      const metadata = await c.env.wordGameData.getWithMetadata(key.name);
+      const createdAt = metadata.metadata?.created_at || 0;
+
+      if (now - createdAt > expiryDuration) {
+        await c.env.wordGameData.delete(key.name);
+        console.log(`Deleted expired key: ${key.name}`);
+      }
+    }
+  } catch (err) {
+    console.error('Error clearing expired keys:', err);
+  }
+}
+
+setInterval(() => {clearExpiredKeys(c);}, expiryDuration + 5000);
 
 app.use("*", (c, next) => {
   try {
