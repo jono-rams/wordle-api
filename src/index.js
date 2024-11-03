@@ -45,7 +45,12 @@ app.get('/api/new-word', async (c) => {
     }
     const data = await response.json();
     
-    await c.env.wordGameData.put(uid, data[0]);
+    if (c.env.wordGameData) { 
+      await c.env.wordGameData.put(uid, data[0]);
+    } else {
+      console.error('Error: wordGameData is undefined');
+      return c.status(500).json({ error: 'Failed to store word in KV' });
+    }
 
     return c.json({ uid });
   } catch (err) {
@@ -57,7 +62,12 @@ app.get('/api/new-word', async (c) => {
       }
       const data = await response.json();
 
-      await c.env.wordGameData.put(uid, data[0]);
+      if (c.env.wordGameData) { 
+        await c.env.wordGameData.put(uid, data[0]);
+      } else {
+        console.error('Error: wordGameData is undefined');
+        return c.status(500).json({ error: 'Failed to store word in KV' });
+      }
 
       console.log(wordByUser[uid]);
       return c.json({ uid });
