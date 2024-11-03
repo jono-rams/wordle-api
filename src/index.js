@@ -102,6 +102,7 @@ function compareWords(secretWord, guess) {
 app.get('/api/solution', (c) => {
   const uid = c.req.query('uid');
   const solution = wordByUser[uid];
+  delete wordByUser[uid];
   return c.json({ solution });
 });
 
