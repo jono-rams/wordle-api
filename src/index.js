@@ -140,6 +140,10 @@ app.get('/api/cleanup', async (c) => {
   return c.text('Cleanup initiated');
 });
 
+app.get('/favicon.ico', (c) => {
+  return c.status(204);
+});
+
 app.get('*', serveStatic({ path: './index.html' })); 
 
 export default app;
