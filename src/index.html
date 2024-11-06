@@ -34,10 +34,28 @@
     <h1 class="text-center mb-4">Word Game API Documentation</h1>
 
     <p class="lead">
-      This document describes the API endpoints for the Word Game. 
-      The game generates a random 5-letter word, and the player needs to guess it.
-      This API is served from a Cloudflare Worker.
+      Welcome to the API documentation for the Wordle Game! This API provides a set of endpoints that allow you to generate random 5-letter words and check guesses against the hidden word, just like the popular Wordle game.
     </p>
+
+    <h2 class="mb-3">How to Play</h2>
+    <ol>
+      <li><b>Start a new game:</b> Make a GET request to <code>/api/new-word</code> to generate a new word and receive a unique session ID (<code>uid</code>).</li>
+      <li><b>Submit guesses:</b> Make POST requests to <code>/api/guess</code>, including the <code>uid</code> and your 5-letter guess in the request body.</li>
+      <li><b>Get feedback:</b> The API will respond with a result indicating which letters are correct and in the correct position (green), which letters are correct but in the wrong position (yellow), and which letters are not in the word (grey).</li>
+      <li><b>Get the solution (if you give up):</b> Make a GET request to <code>/api/solution?uid=your-uid</code> (replace <code>your-uid</code> with the actual session ID) to reveal the hidden word. <b>Note:</b>  This will also delete the current game session, and you will no longer be able to make guesses for that <code>uid</code>.</li>
+    </ol>
+
+    <h2 class="mb-3">Example Usage</h2>
+    <pre class="code-block">
+# Start a new game
+curl https://your-worker-domain.com/api/new-word
+
+# Submit a guess (replace your-uid with the actual session ID)
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"uid": "your-uid", "guess": "crane"}' \
+  https://your-worker-domain.com/api/guess
+</pre>
+
 
     <h2 class="mb-3">Endpoints</h2>
 
@@ -55,7 +73,7 @@
         <tr>
           <td><code>/api/new-word</code></td>
           <td>GET</td>
-          <td>Generates a new 5-letter word and returns a unique session ID (uid).</td>
+          <td>Generates a new 5-letter word and returns a unique session ID (<code>uid</code>).</td>
           <td>N/A</td>
           <td>
             <pre class="code-block">{
@@ -86,11 +104,11 @@
           </td>
         </tr>
         <tr>
-          <td><code>/api/solution</code></td>
+          <td><code>/api/solution?uid=your-uid</code></td>
           <td>GET</td>
           <td>Retrieves the solution for the given session ID and deletes the corresponding session data.
             <br>
-            <b>Query Parameter:</b> <code>uid</code> - The session ID.
+            <b>Required Query Parameter:</b> <code>uid</code> - The session ID returned by the <code>/api/new-word</code> endpoint.
           </td>
           <td>N/A</td>
           <td>
@@ -103,7 +121,7 @@
     </table>
 
     <h2>Color Codes</h2>
-    <p>The "result" array in the <code>/api/guess</code> response contains objects with a "color" property. These colors indicate the following:</p>
+    <p>The <code>result</code> array in the <code>/api/guess</code> response contains objects with a <code>color</code> property. These colors indicate the following:</p>
     <ul>
       <li><b>green:</b> The letter is in the correct position.</li>
       <li><b>yellow:</b> The letter is in the word but in the wrong position.</li>
