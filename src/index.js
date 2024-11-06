@@ -7,7 +7,7 @@ async function clearExpiredKeys(c) {
   try {
     const list = await c.env.wordGameData.list();
 
-    const expiryDuration = 60 * 60 * 24 * 1000; // 1 day in milliseconds
+    const expiryDuration = 60 * 60 * 1000; // 1 hour in milliseconds
     const now = Date.now();
 
     for (const key of list.keys) {
@@ -16,7 +16,7 @@ async function clearExpiredKeys(c) {
 
       if (now - createdAt > expiryDuration) {
         await c.env.wordGameData.delete(key.name);
-        console.log(`Deleted expired key: ${key.name}`);
+        console.log(`Deleted expired key: ${key.name} created ${(now-createdAt)/1000/60/60} hours ago`);
       }
     }
   } catch (err) {
