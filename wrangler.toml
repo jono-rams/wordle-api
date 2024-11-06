@@ -14,8 +14,8 @@ id = "a33a9549e55042ef9d4075ac58f85423"
 [observability]
 enabled = true
 
-[site]
-bucket = "./src" 
+[assets]
+directory = "./src" 
 
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
