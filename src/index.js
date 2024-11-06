@@ -146,7 +146,7 @@ app.get('/favicon.ico', (c) => {
 
 app.get('*', async (c, next) => {
   try {
-    await serveStatic({ path: './index.html' })(c, next);
+    await serveStatic({ path: './index.html' });
   } catch (err) {
     console.error('Error serving static file:', err);
     return c.status(500).text('Internal Server Error');
