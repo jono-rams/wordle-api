@@ -1,6 +1,5 @@
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
-import { serveStatic } from 'hono/serve-static';
 import { cors } from 'hono/cors';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -33,6 +32,15 @@ app.use('*', cors({
   allowMethods: ['GET', 'POST', 'OPTIONS'],
   allowHeaders: ['Content-Type']
 }));
+
+app.get('/', async (c) => {
+  try {
+    return await c.file('./index.html');
+  } catch (err) {
+    console.error('Error serving static file:', err);
+    return c.status(500).text('Internal Server Error');
+  }
+});
 
 app.get('/api/new-word', async (c) => {
   const uid = uuidv4();
@@ -139,19 +147,5 @@ app.get('/api/cleanup', async (c) => {
   await clearExpiredKeys(c);
   return c.text('Cleanup initiated');
 });
-
-app.get('/favicon.ico', (c) => {
-  return c.status(204);
-});
-
-app.get('*', async (c, next) => {
-  try {
-    await serveStatic({ path: './index.html' });
-  } catch (err) {
-    console.error('Error serving static file:', err);
-    return c.status(500).text('Internal Server Error');
-  }
-  
-}); 
 
 export default app;
