@@ -34,8 +34,6 @@ app.use('*', cors({
   allowHeaders: ['Content-Type']
 }));
 
-app.get('*', serveStatic({ path: './index.html' })); 
-
 app.get('/api/new-word', async (c) => {
   const uid = uuidv4();
   try {
@@ -141,5 +139,7 @@ app.get('/api/cleanup', async (c) => {
   await clearExpiredKeys(c);
   return c.text('Cleanup initiated');
 });
+
+app.get('*', serveStatic({ path: './index.html' })); 
 
 export default app;
