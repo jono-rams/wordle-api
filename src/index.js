@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
 import { serveStatic } from 'hono/serve-static';
+import { cors } from 'hono/cors';
 import { v4 as uuidv4 } from 'uuid';
 
 const app = new Hono();
@@ -27,28 +28,11 @@ async function clearExpiredKeys(c) {
   }
 }
 
-app.use("*", (c, next) => {
-  try {
-    const headers = new Headers();
-    headers.set("Access-Control-Allow-Origin", "*");
-    headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    headers.set("Access-Control-Allow-Headers", "Content-Type");
-
-    if (c.req.method === "OPTIONS") {
-      headers.set('Access-Control-Max-Age', '86400');
-      return new Response(null, { status: 204, headers });
-    }
-
-    c.res.headers.set('Access-Control-Allow-Origin', '*');
-    c.res.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    c.res.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-    
-    return next();
-  } catch (err) {
-    console.error('Error in CORS middleware:', err);
-    return new Response('Internal server error', { status: 500 });
-  }
-});
+app.use('*', cors({
+  origin: '*', // Allow all origins
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type']
+}));
 
 app.get('*', serveStatic({ path: './index.html' })); 
 
