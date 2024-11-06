@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import { logger } from 'hono/logger';
-import { serveStatic } from 'hono/serve-static.module';
+import { serveStatic } from 'hono/serve-static';
 import { v4 as uuidv4 } from 'uuid';
 
 const app = new Hono();
