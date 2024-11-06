@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Word Game API Documentation</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #282c34; 
+      color: #abb2bf; 
+      margin: 40px;
+    }
+    .code-block {
+      background-color: #353a42;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      overflow-x: auto;
+      color: #abb2bf; 
+    }
+    h1, h2 {
+      color: #c678dd; 
+    }
+    .table {
+      color: #abb2bf; 
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #353a42; 
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="text-center mb-4">Word Game API Documentation</h1>
+
+    <p class="lead">This document describes the API endpoints for the Word Game. The game generates a random 5-letter word, and the player needs to guess it. </p>
+
+    <h2 class="mb-3">Endpoints</h2>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Endpoint</th>
+          <th scope="col">Method</th>
+          <th scope="col">Description</th>
+          <th scope="col">Example Request Body</th>
+          <th scope="col">Example Response Body</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/api/new-word</code></td>
+          <td>GET</td>
+          <td>Generates a new 5-letter word and returns a unique session ID (uid).</td>
+          <td>N/A</td>
+          <td>
+<pre class="code-block">
+{
+  "uid": "a1b2c3d4-e5f6-7890-1234-567890abcdef" 
+}</pre>
+          </td>
+        </tr>
+        <tr>
+          <td><code>/api/guess</code></td>
+          <td>POST</td>
+          <td>Submits a guess for the word associated with the provided session ID.</td>
+          <td>
+<pre class="code-block">
+{
+  "uid": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "guess": "world"
+}</pre>
+          </td>
+          <td>
+<pre class="code-block">
+{
+  "result": [
+    {"key": "w", "color": "yellow"}, 
+    {"key": "o", "color": "grey"}, 
+    {"key": "r", "color": "grey"}, 
+    {"key": "l", "color": "green"}, 
+    {"key": "d", "color": "grey"}
+  ]
+}</pre>
+          </td>
+        </tr>
+        <tr>
+          <td><code>/api/solution</code></td>
+          <td>GET</td>
+          <td>
+            Retrieves the solution for the given session ID and deletes the corresponding session data.
+            <br>
+            <b>Query Parameter:</b> <code>uid</code> - The session ID.
+          </td>
+          <td>N/A</td>
+          <td>
+<pre class="code-block">
+{
+  "solution": "crane"
+}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Color Codes</h2>
+    <p>The "result" array in the <code>/api/guess</code> response contains objects with a "color" property. These colors indicate the following:</p>
+    <ul>
+      <li><b>green:</b> The letter is in the correct position.</li>
+      <li><b>yellow:</b> The letter is in the word but in the wrong position.</li>
+      <li><b>grey:</b> The letter is not in the word.</li>
+    </ul>
+
+    <h2>Error Handling</h2>
+    <p>The API may return the following error responses:</p>
+    <ul>
+      <li><b>400 Bad Request:</b>  Indicates an invalid request, such as an invalid session ID or an invalid guess format.</li>
+      <li><b>500 Internal Server Error:</b> Indicates an internal server error, such as a failure to fetch the word or store data.</li>
+    </ul>
+  </div>
+
+</body>
+</html>
