@@ -7,6 +7,7 @@ async function clearExpiredKeys(c) {
   try {
     const list = await c.env.wordGameData.list();
 
+    const expiryDuration = 60 * 60 * 24 * 1000; // 1 day in milliseconds
     const now = Date.now();
 
     for (const key of list.keys) {
