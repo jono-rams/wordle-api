@@ -144,6 +144,14 @@ app.get('/favicon.ico', (c) => {
   return c.status(204);
 });
 
-app.get('*', serveStatic({ path: './index.html' })); 
+app.get('*', async (c, next) => {
+  try {
+    await serveStatic({ path: './index.html' })(c, next);
+  } catch (err) {
+    console.error('Error serving static file:', err);
+    return c.status(500).text('Internal Server Error');
+  }
+  
+}); 
 
 export default app;
