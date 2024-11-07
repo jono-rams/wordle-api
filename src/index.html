@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Word Game API Documentation</title>
+  <title>Wordle Game API Documentation</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
@@ -31,7 +31,7 @@
 <body>
 
   <div class="container">
-    <h1 class="text-center mb-4">Word Game API Documentation</h1>
+    <h1 class="text-center mb-4">Wordle Game API Documentation</h1>
 
     <p class="lead">
       Welcome to the API documentation for the Wordle Game! This API provides a set of endpoints that allow you to generate random 5-letter words and check guesses against the hidden word, just like the popular Wordle game.
@@ -48,12 +48,12 @@
     <h2 class="mb-3">Example Usage</h2>
     <pre class="code-block">
 # Start a new game
-curl https://your-worker-domain.com/api/new-word
+curl https://wordle-api.jono-rams.work/api/new-word
 
 # Submit a guess (replace your-uid with the actual session ID)
 curl -X POST -H "Content-Type: application/json" \
   -d '{"uid": "your-uid", "guess": "crane"}' \
-  https://your-worker-domain.com/api/guess
+  https://wordle-api.jono-rams.work/api/guess
 </pre>
 
 
