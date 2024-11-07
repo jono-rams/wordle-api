@@ -7,7 +7,7 @@
     body {
       background-color: #282c34;  
       color: #abb2bf; 
-      margin: 40px;
+      margin: 20px;
     }
     .code-block {
       background-color: #353a42;
@@ -23,8 +23,15 @@
     .table {
       color: #abb2bf; 
     }
+    .table-striped tbody tr td {
+      vertical-align: middle;
+    }
     .table-striped tbody tr:nth-of-type(odd) {
       background-color: #353a42; 
+    }
+    .code-block {
+      min-height: 200px;
+      align-content: center;
     }
   </style>
 </head>
@@ -135,6 +142,19 @@ curl -X POST -H "Content-Type: application/json" \
       <li><b>500 Internal Server Error:</b> Indicates an internal server error, such as a failure to fetch the word or store data.</li>
     </ul>
   </div>
+
+  <footer class="text-center mt-5">
+    <p>
+      Copyright &copy; 2023 Jonathan Rampersad
+      <a href="https://github.com/your-github-username/your-repo-name" target="_blank" rel="noopener">
+        <img src="img/github-logo.svg" alt="GitHub Logo" height="24">
+      </a>
+    </p>
+    <p>
+      Licensed under the
+      <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank" rel="noopener">GNU General Public License v3.0</a>
+    </p>
+  </footer>
 
 </body>
 </html>
