@@ -1,12 +1,6 @@
 name: Automated API tests using Postman CLI
 
-on:
-  workflow_run:
-    workflows: ["Workers Builds: wordle-api"]
-    types: 
-      - completed
-    branches:
-      - main
+on: push
 
 jobs:
   automated-api-tests:
@@ -19,8 +13,6 @@ jobs:
           node-version: 20
       - name: Install Newman
         run: npm install -g newman
-      - name: Wait for 10 seconds
-        run: sleep 10 
       - name: Run API tests
         run: |
           newman run "api-tests-pm.json" -e "39631033-b4dc4385-e7a5-4427-964d-c0c21874ef3d.json"
