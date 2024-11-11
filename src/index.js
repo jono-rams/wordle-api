@@ -130,9 +130,10 @@ app.get('/api/solution', async (c) => {
 
   if (solution) {
     await c.env.wordGameData.delete(uid);
+    return c.json({ solution });
+  } else {
+    return c.status(400).json({ error: 'Invalid session id' });
   }
-  
-  return c.json({ solution });
 });
 
 app.get('/api/cleanup', async (c) => {
