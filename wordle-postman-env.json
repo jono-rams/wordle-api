@@ -1,0 +1,15 @@
+{
+	"id": "b4dc4385-e7a5-4427-964d-c0c21874ef3d",
+	"name": "Wordle",
+	"values": [
+		{
+			"key": "userId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2024-11-11T01:29:28.786Z",
+	"_postman_exported_using": "Postman/11.19.0"
+}

@@ -15,4 +15,4 @@ jobs:
         run: npm install -g newman
       - name: Run API tests
         run: |
-          newman run "api-tests-pm.json" -e "39631033-b4dc4385-e7a5-4427-964d-c0c21874ef3d.json"
+          newman run "api-tests-pm.json" -e "wordle-postman-env.json"
