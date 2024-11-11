@@ -1,0 +1,243 @@
+{
+	"info": {
+		"_postman_id": "ae130b0f-e1cc-417b-984a-caafff88ce19",
+		"name": "Wordle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39631033"
+	},
+	"item": [
+		{
+			"name": "Get Word",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json(); \r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains a non-null uid\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.uid).to.not.be.null; \r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the Content-Type header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json; charset=UTF-8\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 5000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"userId\", jsonData.uid);\r",
+							"\r",
+							"pm.test(\"Environment variable is set\", function () {\r",
+							"    pm.expect(pm.environment.get(\"userId\")).to.not.be.null;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://wordle-api.rampersad-jonathan.workers.dev/api/new-word",
+					"protocol": "https",
+					"host": [
+						"wordle-api",
+						"rampersad-jonathan",
+						"workers",
+						"dev"
+					],
+					"path": [
+						"api",
+						"new-word"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Guess Word",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the Content-Type header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json; charset=UTF-8\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the correct structure\", function () {\r",
+							"  const jsonData = pm.response.json();\r",
+							"\r",
+							"  // Check if the 'result' property exists and is an array\r",
+							"  pm.expect(jsonData).to.have.property(\"result\");\r",
+							"  pm.expect(jsonData.result).to.be.an(\"array\");\r",
+							"\r",
+							"  // Check if the array has the correct number of elements\r",
+							"  pm.expect(jsonData.result).to.have.lengthOf(5);\r",
+							"\r",
+							"  // Check the structure of each element in the array\r",
+							"  jsonData.result.forEach((item) => {\r",
+							"    pm.expect(item).to.have.property(\"key\");\r",
+							"    pm.expect(item).to.have.property(\"color\");\r",
+							"    pm.expect(item.key).to.be.a(\"string\");\r",
+							"    pm.expect(item.color).to.be.a(\"string\");\r",
+							"  });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uid\": \"{{userId}}\",\r\n    \"guess\": \"audio\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://wordle-api.rampersad-jonathan.workers.dev/api/guess",
+					"protocol": "https",
+					"host": [
+						"wordle-api",
+						"rampersad-jonathan",
+						"workers",
+						"dev"
+					],
+					"path": [
+						"api",
+						"guess"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Solution",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the Content-Type header\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json; charset=UTF-8\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has the correct structure\", function () {\r",
+							"  const jsonData = pm.response.json();\r",
+							"\r",
+							"  // Check if the 'solution' property exists and is a string\r",
+							"  pm.expect(jsonData).to.have.property(\"solution\");\r",
+							"  pm.expect(jsonData.solution).to.be.an(\"string\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://wordle-api.rampersad-jonathan.workers.dev/api/solution?uid={{userId}}",
+					"protocol": "https",
+					"host": [
+						"wordle-api",
+						"rampersad-jonathan",
+						"workers",
+						"dev"
+					],
+					"path": [
+						"api",
+						"solution"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Solution Null After",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {\r",
+							"    pm.response.to.have.status(500);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://wordle-api.rampersad-jonathan.workers.dev/api/solution?uid={{userId}}",
+					"protocol": "https",
+					"host": [
+						"wordle-api",
+						"rampersad-jonathan",
+						"workers",
+						"dev"
+					],
+					"path": [
+						"api",
+						"solution"
+					],
+					"query": [
+						{
+							"key": "uid",
+							"value": "{{userId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

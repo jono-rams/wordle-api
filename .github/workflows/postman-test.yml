@@ -1,17 +1,26 @@
 name: Automated API tests using Postman CLI
 
-on: push
+on:
+  workflow_run:
+    workflows: ["Workers Builds: wordle-api"]
+    types: 
+      - completed
+    branches:
+      - main
 
 jobs:
   automated-api-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Postman CLI
-        run: |
-          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-      - name: Login to Postman CLI
-        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install Newman
+        run: npm install -g newman
+      - name: Wait for 10 seconds
+        run: sleep 10 
       - name: Run API tests
         run: |
-          postman collection run "39631033-ae130b0f-e1cc-417b-984a-caafff88ce19" -e "39631033-b4dc4385-e7a5-4427-964d-c0c21874ef3d"
+          newman run "api-tests-pm.json" -e "39631033-b4dc4385-e7a5-4427-964d-c0c21874ef3d.json"
