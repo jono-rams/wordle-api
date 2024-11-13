@@ -21,7 +21,8 @@
       color: #c678dd; 
     }
     .table {
-      color: #abb2bf; 
+      color: #abb2bf;
+			overflow-x: auto;
     }
     .table-striped tbody tr td {
       vertical-align: middle;
@@ -65,67 +66,68 @@ curl -X POST -H "Content-Type: application/json" \
 
 
     <h2 class="mb-3">Endpoints</h2>
-
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Endpoint</th>
-          <th scope="col">Method</th>
-          <th scope="col">Description</th>
-          <th scope="col">Example Request Body</th>
-          <th scope="col">Example Response Body</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>/api/new-word</code></td>
-          <td>GET</td>
-          <td>Generates a new 5-letter word and returns a unique session ID (<code>uid</code>).</td>
-          <td>N/A</td>
-          <td>
-            <pre class="code-block">{
-  "uid": "a1b2c3d4-e5f6-7890-1234-567890abcdef" 
-}</pre>
-          </td>
-        </tr>
-        <tr>
-          <td><code>/api/guess</code></td>
-          <td>POST</td>
-          <td>Submits a guess for the word associated with the provided session ID.</td>
-          <td>
-            <pre class="code-block">{
-  "uid": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
-  "guess": "world"
-}</pre>
-          </td>
-          <td>
-            <pre class="code-block">{
-  "result": [
-    {"key": "w", "color": "yellow"}, 
-    {"key": "o", "color": "grey"}, 
-    {"key": "r", "color": "grey"}, 
-    {"key": "l", "color": "green"}, 
-    {"key": "d", "color": "grey"}
-  ]
-}</pre>
-          </td>
-        </tr>
-        <tr>
-          <td><code>/api/solution?uid=your-uid</code></td>
-          <td>GET</td>
-          <td>Retrieves the solution for the given session ID and deletes the corresponding session data.
-            <br>
-            <b>Required Query Parameter:</b> <code>uid</code> - The session ID returned by the <code>/api/new-word</code> endpoint.
-          </td>
-          <td>N/A</td>
-          <td>
-            <pre class="code-block">{
-  "solution": "crane"
-}</pre>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+		<div class="table-responsive">
+    	<table class="table table-striped">
+      	<thead>
+        	<tr>
+          	<th scope="col">Endpoint</th>
+          	<th scope="col">Method</th>
+          	<th scope="col">Description</th>
+          	<th scope="col">Example Request Body</th>
+          	<th scope="col">Example Response Body</th>
+        	</tr>
+      	</thead>
+      	<tbody>
+        	<tr>
+          	<td><code>/api/new-word</code></td>
+          	<td>GET</td>
+          	<td>Generates a new 5-letter word and returns a unique session ID (<code>uid</code>).</td>
+          	<td>N/A</td>
+          	<td>
+            	<pre class="code-block">{
+  	"uid": "a1b2c3d4-e5f6-7890-1234-567890abcdef" 
+	}</pre>
+          	</td>
+        	</tr>
+        	<tr>
+          	<td><code>/api/guess</code></td>
+          	<td>POST</td>
+          	<td>Submits a guess for the word associated with the provided session ID.</td>
+          	<td>
+            	<pre class="code-block">{
+  	"uid": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  	"guess": "world"
+	}</pre>
+  	        </td>
+          	<td>
+            	<pre class="code-block">{
+  	"result": [
+    	{"key": "w", "color": "yellow"}, 
+    	{"key": "o", "color": "grey"}, 
+    	{"key": "r", "color": "grey"}, 
+    	{"key": "l", "color": "green"}, 
+    	{"key": "d", "color": "grey"}
+  	]
+	}</pre>
+          	</td>
+        	</tr>
+        	<tr>
+          	<td><code>/api/solution?uid=your-uid</code></td>
+          	<td>GET</td>
+          	<td>Retrieves the solution for the given session ID and deletes the corresponding session data.
+            	<br>
+            	<b>Required Query Parameter:</b> <code>uid</code> - The session ID returned by the <code>/api/new-word</code> endpoint.
+          	</td>
+          	<td>N/A</td>
+          	<td>
+            	<pre class="code-block">{
+  	"solution": "crane"
+	}</pre>
+          	</td>
+        	</tr>
+      	</tbody>
+    	</table>
+		</div>
 
     <h2>Color Codes</h2>
     <p>The <code>result</code> array in the <code>/api/guess</code> response contains objects with a <code>color</code> property. These colors indicate the following:</p>
