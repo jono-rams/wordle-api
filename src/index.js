@@ -20,7 +20,7 @@ async function clearExpiredKeys(c) {
 
 			if (now - createdAt > expiryDuration) {
 				await c.env.wordGameData.delete(key.name);
-				console.log(`Deleted expired key: ${key.name} created ${(now - createdAt) / 1000 / 60 / 60} hours ago`);
+				console.log(`Deleted expired key: ${key.name} created ${(((now - createdAt) / 1000) / 60) / 60} hours ago`);
 			}
 		}
 	} catch (err) {
