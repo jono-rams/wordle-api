@@ -1,171 +1,224 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Wordle Game API Documentation</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    body {
-      background-color: #282c34;  
-      color: #abb2bf; 
-      margin: 20px;
-    }
-    .code-block {
-      background-color: #353a42;
-      padding: 10px;
-      border-radius: 5px;
-      font-family: monospace;
-      overflow-x: auto;
-      color: #abb2bf; 
-    }
-    h1, h2 {
-      color: #c678dd; 
-    }
-    .table {
-      color: #abb2bf;
-			overflow-x: auto;
-    }
-    .table-striped tbody tr td {
-      vertical-align: middle;
-    }
-    .table-striped tbody tr:nth-of-type(odd) {
-      background-color: #353a42; 
-    }
-    .table-striped tbody tr td .code-block {
-      background-color: transparent;
-      padding: 0;
-    }
-    .code-block {
-      min-height: 200px;
-      align-content: center;
-    }
-    @media (min-width: 1200px) {
-      .container {
-        max-width: 1175px;
-      }
-    }
-  </style>
-</head>
-<body>
+	<head>
+		<title>Wordle Game API Documentation</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+		<style>
+			body {
+				background-color: #282c34;
+				color: #abb2bf;
+				margin: 20px;
+			}
+			.code-block {
+				background-color: #353a42;
+				padding: 10px;
+				border-radius: 5px;
+				font-family: monospace;
+				overflow-x: auto;
+				color: #abb2bf;
+			}
+			h1, h2 {
+				color: #c678dd;
+			}
+			.table {
+				color: #abb2bf;
+				overflow-x: auto;
+			}
+			.table-striped tbody tr td {
+				vertical-align: middle;
+			}
+			.table-striped tbody tr:nth-of-type(odd) {
+				background-color: #353a42;
+			}
+			.table-striped tbody tr td .code-block {
+				background-color: transparent;
+				padding: 0;
+			}
+			.code-block {
+				min-height: 200px;
+				align-content: center;
+			}
+			@media (min-width: 1250px) {
+				.container {
+					max-width: 1235px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1 class="text-center mb-4">Wordle Game API Documentation</h1>
 
-  <div class="container">
-    <h1 class="text-center mb-4">Wordle Game API Documentation</h1>
+			<p class="lead">
+				Welcome to the API documentation for the Wordle Game! This API provides a set of endpoints that allow you to generate random
+				5-letter words and check guesses against the hidden word, just like the popular Wordle game.
+			</p>
 
-    <p class="lead">
-      Welcome to the API documentation for the Wordle Game! This API provides a set of endpoints that allow you to generate random 5-letter words and check guesses against the hidden word, just like the popular Wordle game.
-    </p>
+			<h2 class="mb-3">How to Play</h2>
+			<ol>
+				<li>
+					<b>Start a new game:</b> Make a GET request to <code>/api/new-word</code> to generate a new word and receive a unique session ID
+					(<code>session_id</code>).
+					<span style="color: #f062ab"><b>Important:</b> The session is only valid for 15 minutes upon creation.</span>
+				</li>
+				<li>
+					<b>Submit guesses:</b> Make POST requests to <code>/api/guess</code>, including the <code>session_id</code> and your 5-letter
+					guess in the request body.
+				</li>
+				<li>
+					<b>Get feedback:</b> The API will respond with a result indicating which letters are correct and in the correct position (green),
+					which letters are correct but in the wrong position (yellow), and which letters are not in the word (grey).
+				</li>
+				<li>
+					<b>Get the solution (if you give up):</b> Make a GET request to <code>/api/solution?session_id=your-session_id</code> (replace
+					<code>your-session_id</code> with the actual session ID) to reveal the hidden word.
+					<span style="color: #f062ab"
+						><b>Note:</b> This will also delete the current game session, and you will no longer be able to make guesses for that
+						<code>session_id</code></span
+					>.
+				</li>
+			</ol>
 
-    <h2 class="mb-3">How to Play</h2>
-    <ol>
-      <li><b>Start a new game:</b> Make a GET request to <code>/api/new-word</code> to generate a new word and receive a unique session ID (<code>uid</code>).</li>
-      <li><b>Submit guesses:</b> Make POST requests to <code>/api/guess</code>, including the <code>uid</code> and your 5-letter guess in the request body.</li>
-      <li><b>Get feedback:</b> The API will respond with a result indicating which letters are correct and in the correct position (green), which letters are correct but in the wrong position (yellow), and which letters are not in the word (grey).</li>
-      <li><b>Get the solution (if you give up):</b> Make a GET request to <code>/api/solution?uid=your-uid</code> (replace <code>your-uid</code> with the actual session ID) to reveal the hidden word. <b>Note:</b>  This will also delete the current game session, and you will no longer be able to make guesses for that <code>uid</code>.</li>
-    </ol>
-
-    <h2 class="mb-3">Example Usage</h2>
-    <pre class="code-block">
+			<h2 class="mb-3">Example Usage</h2>
+			<pre class="code-block">
 # Start a new game
 curl https://wordle-api.jono-rams.work/api/new-word
 
-# Submit a guess (replace your-uid with the actual session ID)
+# Submit a guess (replace your-session_id with the actual session ID)
 curl -X POST -H "Content-Type: application/json" \
-  -d '{"uid": "your-uid", "guess": "crane"}' \
+  -d '{"session_id": "your-session_id", "guess": "crane"}' \
   https://wordle-api.jono-rams.work/api/guess
-</pre>
 
+# Get the solution (replace your-session_id with the actual session ID)
+curl https://wordle-api.jono-rams.work/api/solution?session_id=your-session_id
+</pre
+			>
 
-    <h2 class="mb-3">Endpoints</h2>
-		<div class="table-responsive">
-    	<table class="table table-striped table-sm">
-      	<thead>
-        	<tr>
-          	<th scope="col">Endpoint</th>
-          	<th scope="col">Method</th>
-          	<th scope="col">Description</th>
-          	<th scope="col">Example Request Body</th>
-          	<th scope="col">Example Response Body</th>
-        	</tr>
-      	</thead>
-      	<tbody>
-        	<tr>
-          	<td><code>/api/new-word</code></td>
-          	<td>GET</td>
-          	<td>Generates a new 5-letter word and returns a unique session ID (<code>uid</code>).</td>
-          	<td>N/A</td>
-          	<td>
-            	<pre class="code-block">{
-  "uid": "a1b2c3d4-e5f6-7890-1234-567890abcdef" 
-}</pre>
-          	</td>
-        	</tr>
-        	<tr>
-          	<td><code>/api/guess</code></td>
-          	<td>POST</td>
-          	<td>Submits a guess for the word associated with the provided session ID.</td>
-          	<td>
-            	<pre class="code-block">{
-  "uid": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
-  "guess": "world"
-}</pre>
-  	        </td>
-          	<td>
-            	<pre class="code-block">{
+			<h2 class="mb-3">Endpoints</h2>
+			<div class="table-responsive">
+				<table class="table table-striped table-sm">
+					<thead>
+						<tr>
+							<th scope="col">Endpoint</th>
+							<th scope="col">Method</th>
+							<th scope="col">Description</th>
+							<th scope="col">Example Request Body</th>
+							<th scope="col">Example Response Body</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>/api/new-word</code></td>
+							<td>GET</td>
+							<td>Generates a new 5-letter word and returns a unique session ID (<code>session_id</code>).</td>
+							<td>N/A</td>
+							<td>
+								<pre class="code-block">
+{
+  "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+}</pre
+								>
+							</td>
+						</tr>
+						<tr>
+							<td><code>/api/guess</code></td>
+							<td>POST</td>
+							<td>Submits a guess for the word associated with the provided session ID.</td>
+							<td>
+								<pre class="code-block">
+{
+  "session_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+  "guess": "force" //string, 5 lowercase letters
+}</pre
+								>
+							</td>
+							<td>
+								<pre class="code-block">
+{
   "result": [
-    {"key": "w", "color": "yellow"}, 
+    {"key": "f", "color": "grey"}, 
     {"key": "o", "color": "grey"}, 
-    {"key": "r", "color": "grey"}, 
-    {"key": "l", "color": "green"}, 
-    {"key": "d", "color": "grey"}
+    {"key": "r", "color": "yellow"}, 
+    {"key": "c", "color": "yellow"}, 
+    {"key": "e", "color": "green"}
   ]
-}</pre>
-          	</td>
-        	</tr>
-        	<tr>
-          	<td><code>/api/solution?uid=your-uid</code></td>
-          	<td>GET</td>
-          	<td>Retrieves the solution for the given session ID and deletes the corresponding session data.
-            	<br>
-            	<b>Required Query Parameter:</b> <code>uid</code> - The session ID returned by the <code>/api/new-word</code> endpoint.
-          	</td>
-          	<td>N/A</td>
-          	<td>
-            	<pre class="code-block">{
+}</pre
+								>
+							</td>
+						</tr>
+						<tr>
+							<td><code>/api/solution?session_id=your-session_id</code></td>
+							<td>GET</td>
+							<td>
+								Retrieves the solution for the given session ID and deletes the corresponding session data.
+								<br />
+								<b>Required Query Parameter:</b> <code>session_id</code> - The session ID returned by the
+								<code>/api/new-word</code> endpoint.
+							</td>
+							<td>N/A</td>
+							<td>
+								<pre class="code-block">
+{
   "solution": "crane"
-}</pre>
-          	</td>
-        	</tr>
-      	</tbody>
-    	</table>
+}</pre
+								>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h2>Color Codes</h2>
+			<p>
+				The <code>result</code> array in the <code>/api/guess</code> response contains objects with a <code>color</code> property. These
+				colors indicate the following:
+			</p>
+			<ul>
+				<li><b>green:</b> The letter is in the correct position.</li>
+				<li><b>yellow:</b> The letter is in the word but in the wrong position.</li>
+				<li><b>grey:</b> The letter is not in the word.</li>
+			</ul>
+
+			<h2>Error Handling</h2>
+			<p>The API may return the following error responses:</p>
+			<ul>
+				<li>
+					<b>400 Bad Request:</b> Indicates an invalid request, such as:
+					<ul>
+						<li>Missing required parameters (e.g., missing `session_id` or `guess` in the request body)</li>
+						<li>Invalid guess format (e.g., guess is not a string, not 5 letters long, or contains non-lowercase letters)</li>
+					</ul>
+				</li>
+				<li><b>404 Not Found:</b> Indicates that the requested resource is not found, such as an invalid or expired `session_id`.</li>
+				<li>
+					<b>500 Internal Server Error:</b> Indicates an internal server error, such as:
+					<ul>
+						<li>Database errors</li>
+						<li>Server-side code errors</li>
+						<li>Network issues</li>
+					</ul>
+				</li>
+			</ul>
+
+			<p>
+				<span style="color: #f062ab"
+					><b>Note:</b> The <code>/api/new-word</code> endpoint includes a <code>uid</code> parameter for backward compatibility with older
+					clients. This parameter is equivalent to <code>session_id</code>.</span
+				>
+			</p>
 		</div>
 
-    <h2>Color Codes</h2>
-    <p>The <code>result</code> array in the <code>/api/guess</code> response contains objects with a <code>color</code> property. These colors indicate the following:</p>
-    <ul>
-      <li><b>green:</b> The letter is in the correct position.</li>
-      <li><b>yellow:</b> The letter is in the word but in the wrong position.</li>
-      <li><b>grey:</b> The letter is not in the word.</li>
-    </ul>
-
-    <h2>Error Handling</h2>
-    <p>The API may return the following error responses:</p>
-    <ul>
-      <li><b>400 Bad Request:</b> Indicates an invalid request, such as an invalid session ID or an invalid guess format.</li>
-      <li><b>500 Internal Server Error:</b> Indicates an internal server error, such as a failure to fetch the word or store data.</li>
-    </ul>
-  </div>
-
-  <footer class="text-center mt-5">
-    <p>
-      Copyright &copy; 2023 Jonathan Rampersad
-      <a href="https://github.com/jono-rams/wordle-api" target="_blank" rel="noopener">
-        <img src="img/github-logo.svg" alt="GitHub Logo" height="24">
-      </a>
-    </p>
-    <p>
-      Licensed under the
-      <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank" rel="noopener">GNU General Public License v3.0</a>
-    </p>
-  </footer>
-
-</body>
+		<footer class="text-center mt-5">
+			<p>
+				Copyright &copy; 2023 Jonathan Rampersad
+				<a href="https://github.com/jono-rams/wordle-api" target="_blank" rel="noopener">
+					<img src="img/github-logo.svg" alt="GitHub Logo" height="24" />
+				</a>
+			</p>
+			<p>
+				Licensed under the
+				<a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank" rel="noopener">GNU General Public License v3.0</a>
+			</p>
+		</footer>
+	</body>
 </html>
